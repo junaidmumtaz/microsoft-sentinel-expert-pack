@@ -5,7 +5,6 @@ This repository contains supporting resources and visuals for my LinkedIn blog p
  **Read the full blog post here:**  
 [POC Success - Onboarding Entra B2C Logs (Tenant A & Tenant B) into Microsoft Sentinel](https://www.linkedin.com/pulse/poc-success-onboarding-entra-b2c-logs-tenant-b-microsoft-mumtaz-apgce/?trackingId=FegyuEy6SKC2u%2Fij9Cxl7Q%3D%3D)
 
----
 
 ## Overview
 
