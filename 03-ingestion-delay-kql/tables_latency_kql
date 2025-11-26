@@ -1,0 +1,9 @@
+// Title: Microsoft Sentinel Ingestion Latency Analysis
+// Developed by: Junaid Mumtaz
+// Version: 1.0
+
+union withsource = TableName1 *
+| where TimeGenerated >= ago(24h)
+| summarize ['average E2E IngestionLatency'] = round(avg(todouble(datetime_diff("minute", ingestion_time(), TimeGenerated))), 2) by TableName = TableName1
+| sort by ['average E2E IngestionLatency'] desc
+| top 30 by ['average E2E IngestionLatency']

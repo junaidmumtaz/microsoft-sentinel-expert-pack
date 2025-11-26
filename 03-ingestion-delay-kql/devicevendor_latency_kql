@@ -1,0 +1,11 @@
+// Title: Device Vendors Ingestion Latency Analysis
+// Developed by: Junaid Mumtaz
+// Version: v1.0
+
+CommonSecurityLog
+| where isnotempty(DeviceVendor)
+| summarize 
+    ['average E2E IngestionLatency'] = round(avg(todouble(datetime_diff("minute", ingestion_time(), TimeGenerated))), 2)
+    by DeviceVendor
+| sort by ['average E2E IngestionLatency'] desc
+| top 30 by ['average E2E IngestionLatency']

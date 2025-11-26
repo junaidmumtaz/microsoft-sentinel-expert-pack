@@ -1,0 +1,21 @@
+// Title: Microsoft Sentinel Ingestion Latency Analysis
+// Developed by: Junaid Mumtaz
+// Version: 1.0
+
+let TopTables =
+    union withsource = __SourceTableName__ *
+    | where TimeGenerated > ago(7d)
+    | extend IngestionLatency = datetime_diff("minute", ingestion_time(), TimeGenerated)
+    | summarize AvgLatency = avg(todouble(IngestionLatency)) by __SourceTableName__
+    | top 20 by AvgLatency;
+let DetailedLatency =
+    union withsource = __SourceTableName__ *
+    | where TimeGenerated > ago(7d)
+    | extend IngestionLatency = datetime_diff("minute", ingestion_time(), TimeGenerated)
+    | summarize AvgLatencyPerDay = avg(todouble(IngestionLatency)) by __SourceTableName__, bin(TimeGenerated, 1d);
+DetailedLatency
+| join kind=inner (TopTables) on __SourceTableName__
+| project __SourceTableName__, TimeGenerated, AvgLatencyPerDay
+| make-series AvgLatencySeries = avg(AvgLatencyPerDay) default=0
+    on TimeGenerated from ago(7d) to now() step 1d
+    by __SourceTableName__
